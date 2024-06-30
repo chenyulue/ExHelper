@@ -17,13 +17,13 @@ class ComparisonFrame(ctk.CTkFrame):
         self.label_right.grid(row=0, column=2, sticky="ew")
 
         self.text_left = ctk.CTkTextbox(self, height=400)
-        self.text_left.grid(row=1, column=0, sticky="nsew")
+        self.text_left.grid(row=1, column=0, sticky="nsew", padx=(5, 0))
 
         self.button_middle = self._create_buttons(["比较", "清空"])
         self.button_middle.grid(row=1, column=1, sticky="ns")
 
         self.text_right = ctk.CTkTextbox(self, height=400)
-        self.text_right.grid(row=1, column=2, sticky="nsew")
+        self.text_right.grid(row=1, column=2, sticky="nsew", padx=(0, 5))
 
         self.label_result = ctk.CTkLabel(
             self, text="修改对照：", font=self.setting.font,
@@ -32,7 +32,7 @@ class ComparisonFrame(ctk.CTkFrame):
         self.label_result.grid(row=2, column=0, columnspan=3, sticky="w", padx=5, pady=(8, 2))
 
         self.text_bottom = ctk.CTkTextbox(self, height=200)
-        self.text_bottom.grid(row=3, column=0, columnspan=3, sticky="nsew")
+        self.text_bottom.grid(row=3, column=0, columnspan=3, sticky="nsew", padx=5, pady=(0, 5))
         
 
     def _configure_grid(
