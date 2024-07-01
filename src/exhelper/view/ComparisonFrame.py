@@ -1,6 +1,7 @@
 import customtkinter as ctk
 
 from ..model import ConfigModel
+from ..controller import Controller
 
 
 class ComparisonFrame(ctk.CTkFrame):
@@ -8,6 +9,7 @@ class ComparisonFrame(ctk.CTkFrame):
         super().__init__(master, *args, **kwargs)
         self.master = master
         self.setting = ConfigModel()
+        self.controller = None
 
         self._configure_grid([(0, 0), (1, 2), (2, 0), (3, 1)], [(0, 1), (1, 0), (2, 1)])
 
@@ -33,7 +35,9 @@ class ComparisonFrame(ctk.CTkFrame):
 
         self.text_bottom = ctk.CTkTextbox(self, height=200)
         self.text_bottom.grid(row=3, column=0, columnspan=3, sticky="nsew", padx=5, pady=(0, 5))
-        
+
+    def set_controller(self, controller: Controller):
+        self.controller = controller
 
     def _configure_grid(
         self, rows: list[tuple[int, int]], cols: list[tuple[int, int]]
@@ -60,6 +64,7 @@ class ComparisonFrame(ctk.CTkFrame):
             font=self.setting.font,
             text_color=(self.setting.light_fg, self.setting.dark_fg),
             fg_color=(self.setting.light_bg, self.setting.dark_bg),
+            hover_color=self.setting.hover_color,
         )
         btn.grid(row=0, column=1, sticky="e", padx=5, pady=5)
 
@@ -76,6 +81,7 @@ class ComparisonFrame(ctk.CTkFrame):
                 font=self.setting.font,
                 text_color=(self.setting.light_fg, self.setting.dark_fg),
                 fg_color=(self.setting.light_bg, self.setting.dark_bg),
+                hover_color=self.setting.hover_color,
             )
             btn.grid(row=i+1, sticky="we", column=0, padx=5, pady=5)
 

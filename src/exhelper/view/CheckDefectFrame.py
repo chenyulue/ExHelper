@@ -82,12 +82,14 @@ class CheckDefectFrame(ctk.CTkFrame):
         btn_clear = ctk.CTkButton(
             frame, text="清空", fg_color=self.setting.light_bg,
             font=self.setting.font, text_color=self.setting.light_fg,
+            hover_color=self.setting.hover_color,
             width=50
         )
         btn_clear.grid(row=2, column=0, padx=5, pady=5, sticky="we")
         btn_check = ctk.CTkButton(
             frame, text="检查", fg_color=self.setting.light_bg,
             font=self.setting.font, text_color=self.setting.light_fg,
+            hover_color=self.setting.hover_color,
             width=50,
         )
         btn_check.grid(row=2, column=1, padx=5, pady=5, sticky="we")
@@ -102,6 +104,7 @@ class CheckDefectFrame(ctk.CTkFrame):
         btn_import = ctk.CTkButton(
             frame, text="导入文本", font=self.setting.font, 
             text_color=self.setting.light_fg, fg_color=self.setting.light_bg,
+            hover_color=self.setting.hover_color,
             width=100,
         )
         btn_import.grid(row=0, column=0, sticky="n", padx=5, pady=5)

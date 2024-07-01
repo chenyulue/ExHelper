@@ -70,6 +70,10 @@ class MainFrame(ctk.CTkFrame):
             children[0].grid_remove()
             self.examine_frame.grid(sticky="nsew")
 
+        self.sidebar.grid_slaves(row=0)[0].configure(fg_color=self.setting.hover_color) # type: ignore
+        for row in [1,2,3]:
+            self.sidebar.grid_slaves(row=row)[0].configure(fg_color="transparent") # type: ignore
+
     def _toggle_comparison(self):
         children = self.body.grid_slaves()
         if not children:
@@ -77,6 +81,10 @@ class MainFrame(ctk.CTkFrame):
         elif children[0] is not self.comparison_frame:
             children[0].grid_remove()
             self.comparison_frame.grid(sticky="nsew")
+
+        self.sidebar.grid_slaves(row=1)[0].configure(fg_color=self.setting.hover_color) # type: ignore
+        for row in [0,2,3]:
+            self.sidebar.grid_slaves(row=row)[0].configure(fg_color="transparent") # type: ignore
 
     def _create_button(self, label: str, image: Path, 
                        icon_size:int=50, button_width:int=100, **kwargs) -> ctk.CTkButton:
@@ -89,6 +97,7 @@ class MainFrame(ctk.CTkFrame):
             text=label, image=img, compound="top",
             fg_color="transparent", 
             text_color=(self.setting.light_fg, self.setting.dark_fg),
+            hover_color=self.setting.hover_color,
             font=self.setting.font,
             **kwargs,
         )
@@ -99,9 +108,6 @@ class MainFrame(ctk.CTkFrame):
             self.grid_rowconfigure(row[0], weight=row[1])
         for col in cols:
             self.grid_columnconfigure(col[0], weight=col[1])    
-
-        
-
 
 if __name__ == "__main__":
     app = ctk.CTk()
