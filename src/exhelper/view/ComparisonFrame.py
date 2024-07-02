@@ -1,7 +1,7 @@
 import customtkinter as ctk
 
 from ..model import ConfigModel
-from ..controller import Controller
+from ..controller import ComparisonController
 
 
 class ComparisonFrame(ctk.CTkFrame):
@@ -10,6 +10,10 @@ class ComparisonFrame(ctk.CTkFrame):
         self.master = master
         self.setting = ConfigModel()
         self.controller = None
+        self.callbacks = {
+            "清空": self.clear_texts,
+            "比较": self.compare_texts,
+        }
 
         self._configure_grid([(0, 0), (1, 2), (2, 0), (3, 1)], [(0, 1), (1, 0), (2, 1)])
 
@@ -18,13 +22,13 @@ class ComparisonFrame(ctk.CTkFrame):
         self.label_right = self._create_comparison_label("原始")
         self.label_right.grid(row=0, column=2, sticky="ew")
 
-        self.text_left = ctk.CTkTextbox(self, height=400)
+        self.text_left = ctk.CTkTextbox(self, height=400, font=self.setting.text_font)
         self.text_left.grid(row=1, column=0, sticky="nsew", padx=(5, 0))
 
         self.button_middle = self._create_buttons(["比较", "清空"])
         self.button_middle.grid(row=1, column=1, sticky="ns")
 
-        self.text_right = ctk.CTkTextbox(self, height=400)
+        self.text_right = ctk.CTkTextbox(self, height=400, font=self.setting.text_font)
         self.text_right.grid(row=1, column=2, sticky="nsew", padx=(0, 5))
 
         self.label_result = ctk.CTkLabel(
@@ -33,11 +37,19 @@ class ComparisonFrame(ctk.CTkFrame):
         )
         self.label_result.grid(row=2, column=0, columnspan=3, sticky="w", padx=5, pady=(8, 2))
 
-        self.text_bottom = ctk.CTkTextbox(self, height=200)
+        self.text_bottom = ctk.CTkTextbox(self, height=200, font=self.setting.text_font)
         self.text_bottom.grid(row=3, column=0, columnspan=3, sticky="nsew", padx=5, pady=(0, 5))
 
-    def set_controller(self, controller: Controller):
+    def set_controller(self, controller: ComparisonController):
         self.controller = controller
+
+    def clear_texts(self):
+        if self.controller is not None:
+            self.controller.clear_texts()
+
+    def compare_texts(self):
+        if self.controller is not None:
+            self.controller.compare_texts()
 
     def _configure_grid(
         self, rows: list[tuple[int, int]], cols: list[tuple[int, int]]
@@ -77,11 +89,12 @@ class ComparisonFrame(ctk.CTkFrame):
 
         for i, label in enumerate(labels):
             btn = ctk.CTkButton(
-                frame, text=label, width=100,
+                frame, text=label, width=50,
                 font=self.setting.font,
                 text_color=(self.setting.light_fg, self.setting.dark_fg),
                 fg_color=(self.setting.light_bg, self.setting.dark_bg),
                 hover_color=self.setting.hover_color,
+                command=self.callbacks[label],
             )
             btn.grid(row=i+1, sticky="we", column=0, padx=5, pady=5)
 

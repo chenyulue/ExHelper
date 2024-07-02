@@ -15,7 +15,7 @@ requires-python = ">=3.11"
 readme = "README.md"
 license = {text = "MIT"}
 
-[project.gui-scripts]
+[project.scripts]
 exhelper = "exhelper.__main__:main"
 
 [build-system]

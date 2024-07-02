@@ -1,4 +1,4 @@
-from .controller.Application import Application
+from .Application import Application
 
 def main():
     Application().run()
