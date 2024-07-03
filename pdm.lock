@@ -5,7 +5,7 @@
 groups = ["default", "test"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.2"
-content_hash = "sha256:f80619dc82e7f2802a4741e3af2fbc17141705b2abbdeb64e0bb4d66084af1d6"
+content_hash = "sha256:f24549d41971b2e3af50f9134cfdc1482a696d13ae7b5276185e849f777b5961"
 
 [[package]]
 name = "colorama"
@@ -31,6 +31,17 @@ dependencies = [
 files = [
     {file = "CTkSpinbox-1.4.1-py3-none-any.whl", hash = "sha256:7beca2fecba1645fd487f2462822e5635bec94565bcb711ad5821a5f782517e7"},
     {file = "ctkspinbox-1.4.1.tar.gz", hash = "sha256:2b80c167995a9fb8e8c41196bf0df49662099b73873c31e66e5d4bf6f00bd37a"},
+]
+
+[[package]]
+name = "ctktooltip"
+version = "0.8"
+requires_python = ">=3.6"
+summary = "Customtkinter Tooltip widget"
+groups = ["default"]
+files = [
+    {file = "CTkToolTip-0.8-py3-none-any.whl", hash = "sha256:dd91fc208596e14d0eea03eaa57b0d6095be995538ce2b87538e4266fa7a753d"},
+    {file = "CTkToolTip-0.8.tar.gz", hash = "sha256:08596120b12c8fa9b9bff2931a3aef3a29719380def9a0a50380c3b6852b4564"},
 ]
 
 [[package]]

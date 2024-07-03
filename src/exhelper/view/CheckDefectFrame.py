@@ -1,13 +1,17 @@
 import customtkinter as ctk
 from CTkSpinbox import CTkSpinbox
+from CTkToolTip import CTkToolTip
+from PIL import Image
 
 from ..model.ConfigModel import ConfigModel
+from .. import assets
 
 class CheckDefectFrame(ctk.CTkFrame):
     def __init__(self, master, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.master = master
         self.setting = ConfigModel()
+        self.regex_is_on = False
 
         self._configure_grid([(0, 2), (1, 1)], [(0, 1), (1, 0)])
 
@@ -63,21 +67,57 @@ class CheckDefectFrame(ctk.CTkFrame):
     def _create_check_buttons(self) -> ctk.CTkFrame:
         frame = ctk.CTkFrame(self)
 
+        entry_search = ctk.CTkEntry(
+            frame, text_color=self.setting.dark_fg,
+            font=self.setting.font, placeholder_text="查找文字..."
+        )
+        entry_search.grid(row=0, column=0, columnspan=2, sticky="we", padx=(5, 0), pady=5)
+
+        btn_frame = ctk.CTkFrame(frame)
+        
+        img_size = 15
+        img_search = ctk.CTkImage(
+            light_image=Image.open(assets.SEARCH_ICON), size=(img_size, img_size)
+        )
+        self._img_regex_off = ctk.CTkImage(
+            light_image=Image.open(assets.REGEX_OFF_ICON), size=(img_size, img_size)
+        )
+        self._img_regex_on = ctk.CTkImage(
+            light_image=Image.open(assets.REGEX_ON_ICON), size=(img_size, img_size)
+        )
+        btn_bg = ctk.ThemeManager.theme["CTkEntry"]["fg_color"]
+        btn_search = ctk.CTkButton(
+            btn_frame, image=img_search, text="", compound="top", fg_color=btn_bg,
+            width=img_size, height=img_size, hover=False, bg_color=btn_bg, corner_radius=0,
+            border_spacing=0,
+        )
+        CTkToolTip(btn_search, message="点击查找", delay=0.5, alpha=0.8)
+        btn_search.grid(row=0, column=0, padx=0, pady=0)
+        self._btn_regex = ctk.CTkButton(
+            btn_frame, image=self._img_regex_off, text="", compound="top", fg_color=btn_bg,
+            width=img_size, height=img_size, hover=False, bg_color=btn_bg, corner_radius=0,
+            border_spacing=0, command=self._toggle_regex
+        )
+        CTkToolTip(self._btn_regex, message="使用正则表达式", delay=0.5, alpha=0.8)
+        self._btn_regex.grid(row=0, column=1, padx=0, pady=0)
+
+        btn_frame.grid(row=0, column=0, columnspan=2, sticky="e", padx=4, pady=0)
+
         switch_seg = ctk.CTkSwitch(
             frame, text="权利要求自动分词", font=self.setting.font,
             text_color=self.setting.dark_fg,
         )
-        switch_seg.grid(row=0, column=0, columnspan=2, sticky="w", padx=5, pady=(5,0))
+        switch_seg.grid(row=1, column=0, columnspan=2, sticky="w", padx=5, pady=(5,0))
 
         label_length = ctk.CTkLabel(
             frame, text="最短截词长度", font=self.setting.font,
             text_color=self.setting.dark_fg,
         )
-        label_length.grid(row=1, column=0, sticky="w", padx=5, pady=(0,5))
+        label_length.grid(row=2, column=0, sticky="w", padx=5, pady=(0,5))
         spinbox_length = CTkSpinbox(
             frame, start_value=2, min_value=1, max_value=20, scroll_value=1,
         )
-        spinbox_length.grid(row=1, column=1, sticky="w", padx=5, pady=(0, 5))
+        spinbox_length.grid(row=2, column=1, sticky="w", padx=5, pady=(0, 5))
 
         btn_clear = ctk.CTkButton(
             frame, text="清空", fg_color=self.setting.light_bg,
@@ -85,37 +125,50 @@ class CheckDefectFrame(ctk.CTkFrame):
             hover_color=self.setting.hover_color,
             width=50
         )
-        btn_clear.grid(row=2, column=0, padx=5, pady=5, sticky="we")
+        btn_clear.grid(row=3, column=0, padx=5, pady=5, sticky="we")
         btn_check = ctk.CTkButton(
             frame, text="检查", fg_color=self.setting.light_bg,
             font=self.setting.font, text_color=self.setting.light_fg,
             hover_color=self.setting.hover_color,
             width=50,
         )
-        btn_check.grid(row=2, column=1, padx=5, pady=5, sticky="we")
+        btn_check.grid(row=3, column=1, padx=5, pady=5, sticky="we")
 
         return frame
+
+    def _toggle_regex(self) -> None:
+        if self.regex_is_on:
+            self._btn_regex.configure(image=self._img_regex_off)
+            self.regex_is_on = False
+        else:
+            self._btn_regex.configure(image=self._img_regex_on)
+            self.regex_is_on = True
 
     def _create_import_setting_buttons(self):
         frame = ctk.CTkFrame(self)
 
         frame.grid_rowconfigure(1, weight=1)
 
+        entry_import = ctk.CTkEntry(
+            frame, text_color=self.setting.dark_fg,
+            placeholder_text="请输入申请号...",
+            font=self.setting.font
+        )
+        entry_import.grid(row=0, column=0, sticky="ew", padx=(5,0), pady=5)
         btn_import = ctk.CTkButton(
-            frame, text="导入文本", font=self.setting.font, 
+            frame, text="导入", font=self.setting.font, 
             text_color=self.setting.light_fg, fg_color=self.setting.light_bg,
             hover_color=self.setting.hover_color,
-            width=100,
+            width=50,
         )
-        btn_import.grid(row=0, column=0, sticky="n", padx=5, pady=5)
+        btn_import.grid(row=0, column=1, sticky="n", padx=(0, 5), pady=5)
 
         frame_check_items = ctk.CTkScrollableFrame(
             frame, label_text="设置查找项目", label_font=self.setting.font,
             label_fg_color=self.setting.light_bg, 
             label_text_color=self.setting.light_fg,
-            # width=150,
         )
-        frame_check_items.grid(row=1, column=0, sticky="sn", padx=5, pady=(5,0))
+        frame_check_items.grid(row=1, column=0, columnspan=2, sticky="sn", padx=1, pady=(5,0))
 
         chk_select_all = ctk.CTkCheckBox(
             frame_check_items, text="全选", font=self.setting.font_bold,
