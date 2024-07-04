@@ -17,7 +17,7 @@ class MainFrame(ctk.CTkFrame):
         self._configure_grid([(0, 1)], [(0, 0), (1, 1)])
 
         self.sidebar = ctk.CTkFrame(
-            self, fg_color=(self.setting.light_bg, self.setting.dark_bg),
+            self, fg_color=ctk.ThemeManager.theme["CTkButton"]["fg_color"],
         )
         self.body = ctk.CTkFrame(self)
         self.sidebar.grid(row=0, column=0, sticky="nsew",)
@@ -70,7 +70,8 @@ class MainFrame(ctk.CTkFrame):
             children[0].grid_remove()
             self.examine_frame.grid(sticky="nsew")
 
-        self.sidebar.grid_slaves(row=0)[0].configure(fg_color=self.setting.hover_color) # type: ignore
+        self.sidebar.grid_slaves(row=0)[0].configure(
+            fg_color=ctk.ThemeManager.theme["CTkButton"]["hover_color"]) # type: ignore
         for row in [1,2,3]:
             self.sidebar.grid_slaves(row=row)[0].configure(fg_color="transparent") # type: ignore
 
@@ -82,7 +83,8 @@ class MainFrame(ctk.CTkFrame):
             children[0].grid_remove()
             self.comparison_frame.grid(sticky="nsew")
 
-        self.sidebar.grid_slaves(row=1)[0].configure(fg_color=self.setting.hover_color) # type: ignore
+        self.sidebar.grid_slaves(row=1)[0].configure(
+            fg_color=ctk.ThemeManager.theme["CTkButton"]["hover_color"]) # type: ignore
         for row in [0,2,3]:
             self.sidebar.grid_slaves(row=row)[0].configure(fg_color="transparent") # type: ignore
 
@@ -96,9 +98,6 @@ class MainFrame(ctk.CTkFrame):
             self.sidebar, width=button_width,
             text=label, image=img, compound="top",
             fg_color="transparent", 
-            text_color=(self.setting.light_fg, self.setting.dark_fg),
-            hover_color=self.setting.hover_color,
-            font=self.setting.font,
             **kwargs,
         )
         return btn

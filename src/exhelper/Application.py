@@ -2,11 +2,12 @@ import customtkinter as ctk
 
 from .view import MainFrame
 from .controller import ComparisonController
-from .model import ComparisonModel
+from .model import ComparisonModel, ConfigModel
 
 class Application(ctk.CTk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.setting = ConfigModel()
 
         self.title("审查助手 - ExHelper")
         self.minsize(1200, 800)
