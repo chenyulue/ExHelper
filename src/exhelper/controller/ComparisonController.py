@@ -1,8 +1,5 @@
-import customtkinter as ctk
-
-from ..model import ComparisonModel, Tag
+from ..model import ComparisonModel, ConfigModel
 from ..view import ComparisonFrame
-from ..model import ConfigModel
 
 class ComparisonController:
     def __init__(self, model: ComparisonModel, view: ComparisonFrame) -> None:

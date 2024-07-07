@@ -1,5 +1,3 @@
-from .CheckDefectFrame import CheckDefectFrame
-from .ComparisonFrame import ComparisonFrame
-from .MainFrame import MainFrame
-
-__all__ = ("CheckDefectFrame", "ComparisonFrame", "MainFrame")
+from .CheckDefectFrame import *  # noqa: F403
+from .ComparisonFrame import *  # noqa: F403
+from .MainFrame import *  # noqa: F403

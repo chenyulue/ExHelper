@@ -11,7 +11,7 @@ ABOUT_ICON = CUR_DIR / "icons" / "关于.png"
 SEARCH_ICON = CUR_DIR / "icons" / "查找.png"
 REGEX_ON_ICON = CUR_DIR / "icons" / "正则表达式-on.png"
 REGEX_OFF_ICON = CUR_DIR / "icons" / "正则表达式-off.png"
-APP_ICON = CUR_DIR / "icons" / "APP-ICON.png"
+APP_ICON = CUR_DIR / "icons" / "APP-ICON.ico"
 
 DEFAULT_THEME = CUR_DIR / "themes" / "Default.json"
 

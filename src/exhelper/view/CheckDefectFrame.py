@@ -3,7 +3,9 @@ from CTkSpinbox import CTkSpinbox
 from CTkToolTip import CTkToolTip
 from PIL import Image
 
-from ..model.ConfigModel import ConfigModel
+from ..model import ConfigModel
+from ..controller import CheckDefectController
+from ..utilities import GroupedCheckBoxes
 from .. import assets
 
 class CheckDefectFrame(ctk.CTkFrame):
@@ -11,7 +13,9 @@ class CheckDefectFrame(ctk.CTkFrame):
         super().__init__(master, *args, **kwargs)
         self.master = master
         self.setting = ConfigModel()
-        self.regex_is_on = False
+        self.regex_is_on = ctk.BooleanVar(value=False)
+        self.controller = None
+        self.defect_check_items = {}
 
         self._configure_grid([(0, 2), (1, 1)], [(0, 1), (1, 0)])
 
@@ -29,6 +33,9 @@ class CheckDefectFrame(ctk.CTkFrame):
 
         self.btns_check = self._create_check_buttons()
         self.btns_check.grid(row=1, column=1, sticky="wen", padx=5, pady=18)
+
+    def set_controller(self, controller: CheckDefectController):
+        self.controller = controller
 
     def _create_panel(self, tags: list[str], height:int=420, two_texts: None|int = None) -> ctk.CTkTabview:
         tabview = ctk.CTkTabview(self, width=800,)
@@ -74,7 +81,9 @@ class CheckDefectFrame(ctk.CTkFrame):
     def _create_check_buttons(self) -> ctk.CTkFrame:
         frame = ctk.CTkFrame(self)
 
-        entry_search = ctk.CTkEntry(frame, placeholder_text="查找文字...")
+        self.simple_search_pattern = ctk.StringVar(value="")
+        entry_search = ctk.CTkEntry(frame, placeholder_text="查找文字...", 
+                                    textvariable=self.simple_search_pattern)
         entry_search.grid(row=0, column=0, columnspan=2, sticky="we", padx=(5, 0), pady=5)
 
         btn_frame = ctk.CTkFrame(frame)
@@ -93,6 +102,7 @@ class CheckDefectFrame(ctk.CTkFrame):
         btn_search = ctk.CTkButton(
             btn_frame, image=img_search, text="", compound="top", fg_color=btn_bg,
             width=img_size, height=img_size, hover=False, bg_color=btn_bg, corner_radius=0,
+            command=self._simple_search
         )
         CTkToolTip(btn_search, message="点击查找", delay=0.5, alpha=0.8)
         btn_search.grid(row=0, column=0, padx=0, pady=0)
@@ -123,13 +133,17 @@ class CheckDefectFrame(ctk.CTkFrame):
 
         return frame
 
+    def _simple_search(self) -> None:
+        if self.controller is not None:
+            self.controller.simple_search()
+        
     def _toggle_regex(self) -> None:
-        if self.regex_is_on:
+        if self.regex_is_on.get():
             self._btn_regex.configure(image=self._img_regex_off)
-            self.regex_is_on = False
+            self.regex_is_on.set(False)
         else:
             self._btn_regex.configure(image=self._img_regex_on)
-            self.regex_is_on = True
+            self.regex_is_on.set(True)
 
     def _create_import_setting_buttons(self):
         frame = ctk.CTkFrame(self)
@@ -144,24 +158,40 @@ class CheckDefectFrame(ctk.CTkFrame):
         frame_check_items = ctk.CTkScrollableFrame(frame, label_text="设置查找项目",)
         frame_check_items.grid(row=1, column=0, columnspan=2, sticky="sn", padx=1, pady=(5,0))
 
-        chk_select_all = ctk.CTkCheckBox(
+        chk_select_all_var = ctk.IntVar(value=3)
+        self.chk_select_all = ctk.CTkSwitch(
             frame_check_items, text="全选", font=self.setting.font_bold,
+            offvalue=0, onvalue=3, command=self._on_all_items_checked,
+            variable=chk_select_all_var,
         )
-        chk_select_all.grid(sticky="w", padx=(5,0), pady=5)
+        self.chk_select_all.grid(sticky="w", padx=(5,0), pady=(5, 10))
         
         for key, items in self.setting.check_items.items():
-            chk_key = ctk.CTkCheckBox(
-                frame_check_items, text=key, font=self.setting.font_bold,
+            self.defect_check_items[key] = GroupedCheckBoxes(
+                frame_check_items, key, items, chk_select_all_var,
             )
-            chk_key.grid(sticky="w", padx=(5,0), pady=(15, 5))
-            for item in items:
-                chk_item = ctk.CTkCheckBox(frame_check_items, text=item,)
-                chk_item.grid(sticky="w", padx=(25, 0), pady=(0, 5))
-
+            self.defect_check_items[key].grid(sticky="ew", padx=(5,0), pady=(5,10))
+            
         return frame
+
+    def _on_all_items_checked(self) -> None:
+        value = self.chk_select_all.get()
+        if value == 3:
+            for key, items in self.defect_check_items.items():
+                items.title_checkbox.select()
+                items._on_title_toggled()
+        elif value == 0:
+            for key, items in self.defect_check_items.items():
+                items.title_checkbox.deselect()
+                items._on_title_toggled()
 
     def _configure_grid(self, rows: list[tuple[int, int]], cols: list[tuple[int, int]]) -> None:
         for row in rows:
             self.grid_rowconfigure(row[0], weight=row[1])
         for col in cols:
-            self.grid_columnconfigure(col[0], weight=col[1]) 
+            self.grid_columnconfigure(col[0], weight=col[1])
+
+    def get_current_tabs(self) -> tuple[ctk.CTkFrame, ctk.CTkFrame]:
+        top_tabname = self.tabview_check.get()
+        bottom_tabname = self.tabview_result.get()
+        return self.tabview_check.tab(top_tabname), self.tabview_result.tab(bottom_tabname)

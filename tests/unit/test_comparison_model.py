@@ -1,6 +1,6 @@
 import pytest
 
-from exhelper.model.ComparisonModel import ComparisonModel, ComparisonResult
+from exhelper.model import ComparisonModel, ComparisonResult
 
 @pytest.fixture
 def model():

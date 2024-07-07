@@ -1,8 +1,9 @@
 import customtkinter as ctk
 
 from .view import MainFrame
-from .controller import ComparisonController
-from .model import ComparisonModel, ConfigModel
+from .controller import ComparisonController, CheckDefectController
+from .model import ComparisonModel, ConfigModel, CheckDefectModel
+from . import assets
 
 class Application(ctk.CTk):
     def __init__(self, *args, **kwargs):
@@ -10,7 +11,10 @@ class Application(ctk.CTk):
         self.setting = ConfigModel()
 
         self.title("审查助手 - ExHelper")
-        self.minsize(1200, 800)
+        self.wm_iconbitmap(assets.APP_ICON)
+        
+        width, height = 1200, 800
+        self.minsize(width, height)
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
@@ -23,6 +27,12 @@ class Application(ctk.CTk):
             self.main_frame.comparison_frame
         )
         self.main_frame.comparison_frame.set_controller(self.comparison_controller)
+
+        self.checkdefect_controller = CheckDefectController(
+            CheckDefectModel(),
+            self.main_frame.examine_frame
+        )
+        self.main_frame.examine_frame.set_controller(self.checkdefect_controller)
 
     def run(self):
         self.mainloop()

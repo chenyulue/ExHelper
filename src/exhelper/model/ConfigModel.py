@@ -1,9 +1,8 @@
 import customtkinter as ctk
-from .. import assets
 
 class ConfigModel:
     def __init__(self) -> None:
-        self.font_bold = ctk.CTkFont(family="SimHei", size=16, weight="bold", underline=True)
+        self.font_bold = ctk.CTkFont(family="SimHei", size=16, weight="bold")
         self.font_text = ctk.CTkFont(family="SimSun", size=16)
         self.text_spacing2 = 7
         self.text_spacing3 = 15
@@ -20,4 +19,3 @@ class ConfigModel:
         }
         self.original_text_color = "red"
         self.modified_text_color = "blue"
-        self.theme = assets.DEFAULT_THEME

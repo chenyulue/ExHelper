@@ -5,7 +5,7 @@
 groups = ["default", "test"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.2"
-content_hash = "sha256:f24549d41971b2e3af50f9134cfdc1482a696d13ae7b5276185e849f777b5961"
+content_hash = "sha256:b54b8cf36b7b92858e79de493419452d48a2d8e1141cd5547591c1f535af0907"
 
 [[package]]
 name = "colorama"
@@ -17,6 +17,21 @@ marker = "sys_platform == \"win32\""
 files = [
     {file = "colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"},
     {file = "colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"},
+]
+
+[[package]]
+name = "ctkmessagebox"
+version = "2.7"
+requires_python = ">=3.6"
+summary = "A modern messagebox for customtkinter"
+groups = ["default"]
+dependencies = [
+    "customtkinter",
+    "pillow",
+]
+files = [
+    {file = "CTkMessagebox-2.7-py3-none-any.whl", hash = "sha256:68941ccab2251f2fd3ac3338a99bdd30d9f28fee4ef0070dfdd0420be1c34a5a"},
+    {file = "ctkmessagebox-2.7.tar.gz", hash = "sha256:5ce7e76b797c8d5de5f29438d8c784e33c72fb6ff666c87eb8991815c46c59c5"},
 ]
 
 [[package]]
