@@ -82,7 +82,7 @@ class CheckDefectFrame(ctk.CTkFrame):
         frame = ctk.CTkFrame(self)
 
         self.simple_search_pattern = ctk.StringVar(value="")
-        entry_search = ctk.CTkEntry(frame, placeholder_text="查找文字...", 
+        entry_search = ctk.CTkEntry(frame, placeholder_text="请输入搜索内容...", 
                                     textvariable=self.simple_search_pattern)
         entry_search.grid(row=0, column=0, columnspan=2, sticky="we", padx=(5, 0), pady=5)
 
