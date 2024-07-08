@@ -5,7 +5,7 @@ from PIL import Image
 
 from ..model import ConfigModel
 from ..controller import CheckDefectController
-from ..utilities import GroupedCheckBoxes
+from ..utilities import CTkLinkedCheckBoxes, CTkTristateCheckBox
 from .. import assets
 
 class CheckDefectFrame(ctk.CTkFrame):
@@ -158,16 +158,17 @@ class CheckDefectFrame(ctk.CTkFrame):
         frame_check_items = ctk.CTkScrollableFrame(frame, label_text="设置查找项目",)
         frame_check_items.grid(row=1, column=0, columnspan=2, sticky="sn", padx=1, pady=(5,0))
 
-        chk_select_all_var = ctk.IntVar(value=3)
-        self.chk_select_all = ctk.CTkSwitch(
+        self._num_all_check_items = sum(len(item) for item in self.setting.check_items.values())
+        chk_select_all_var = ctk.IntVar(value=7)
+        self.chk_select_all = CTkTristateCheckBox(
             frame_check_items, text="全选", font=self.setting.font_bold,
-            offvalue=0, onvalue=3, command=self._on_all_items_checked,
+            offvalue=0, onvalue=self._num_all_check_items, command=self._on_all_items_checked,
             variable=chk_select_all_var,
         )
         self.chk_select_all.grid(sticky="w", padx=(5,0), pady=(5, 10))
         
         for key, items in self.setting.check_items.items():
-            self.defect_check_items[key] = GroupedCheckBoxes(
+            self.defect_check_items[key] = CTkLinkedCheckBoxes(
                 frame_check_items, key, items, chk_select_all_var,
             )
             self.defect_check_items[key].grid(sticky="ew", padx=(5,0), pady=(5,10))
@@ -176,14 +177,18 @@ class CheckDefectFrame(ctk.CTkFrame):
 
     def _on_all_items_checked(self) -> None:
         value = self.chk_select_all.get()
-        if value == 3:
+        if value == self._num_all_check_items:
             for key, items in self.defect_check_items.items():
                 items.title_checkbox.select()
-                items._on_title_toggled()
+                # items._on_title_toggled()
+                for chk_box in items.children_checkboxes:
+                    chk_box.select()
         elif value == 0:
             for key, items in self.defect_check_items.items():
                 items.title_checkbox.deselect()
-                items._on_title_toggled()
+                # items._on_title_toggled()
+                for chk_box in items.children_checkboxes:
+                    chk_box.deselect()
 
     def _configure_grid(self, rows: list[tuple[int, int]], cols: list[tuple[int, int]]) -> None:
         for row in rows:
