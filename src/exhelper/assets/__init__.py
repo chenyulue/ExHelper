@@ -15,5 +15,7 @@ APP_ICON = CUR_DIR / "icons" / "APP-ICON.ico"
 
 DEFAULT_THEME = CUR_DIR / "themes" / "Default.json"
 
+DATA = CUR_DIR / "data.sqlite3"
+
 if __name__ == '__main__':
     print(type(EXAMINATION_ICON))

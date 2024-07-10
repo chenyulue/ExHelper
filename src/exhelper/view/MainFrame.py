@@ -69,6 +69,8 @@ class MainFrame(ctk.CTkFrame):
         elif children[0] is not self.examine_frame:
             children[0].grid_remove()
             self.examine_frame.grid(sticky="nsew")
+            
+        self.examine_frame.tabview_check.tab("摘要").grid_slaves()[0].focus_set()
 
         self.sidebar.grid_slaves(row=0)[0].configure(
             fg_color=ctk.ThemeManager.theme["CTkButton"]["hover_color"]) # type: ignore
@@ -82,6 +84,8 @@ class MainFrame(ctk.CTkFrame):
         elif children[0] is not self.comparison_frame:
             children[0].grid_remove()
             self.comparison_frame.grid(sticky="nsew")
+
+        self.comparison_frame.text_left.focus_set()
 
         self.sidebar.grid_slaves(row=1)[0].configure(
             fg_color=ctk.ThemeManager.theme["CTkButton"]["hover_color"]) # type: ignore

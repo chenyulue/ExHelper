@@ -126,12 +126,20 @@ class CheckDefectFrame(ctk.CTkFrame):
         )
         spinbox_length.grid(row=2, column=1, sticky="w", padx=5, pady=(0, 5))
 
-        btn_clear = ctk.CTkButton(frame, text="清空", width=50)
+        btn_clear = ctk.CTkButton(frame, text="清空", width=50, command=self._clear_texts)
         btn_clear.grid(row=3, column=0, padx=5, pady=5, sticky="we")
-        btn_check = ctk.CTkButton(frame, text="检查", width=50,)
+        btn_check = ctk.CTkButton(frame, text="检查", width=50, command=self._check_defects)
         btn_check.grid(row=3, column=1, padx=5, pady=5, sticky="we")
 
         return frame
+
+    def _clear_texts(self) -> None:
+        if self.controller is not None:
+            self.controller.clear_text()
+
+    def _check_defects(self) -> None:
+        if self.controller is not None:
+            self.controller.check_defects()
 
     def _simple_search(self) -> None:
         if self.controller is not None:
@@ -180,13 +188,11 @@ class CheckDefectFrame(ctk.CTkFrame):
         if value == self._num_all_check_items:
             for key, items in self.defect_check_items.items():
                 items.title_checkbox.select()
-                # items._on_title_toggled()
                 for chk_box in items.children_checkboxes:
                     chk_box.select()
         elif value == 0:
             for key, items in self.defect_check_items.items():
                 items.title_checkbox.deselect()
-                # items._on_title_toggled()
                 for chk_box in items.children_checkboxes:
                     chk_box.deselect()
 
