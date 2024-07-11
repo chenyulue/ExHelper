@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import customtkinter as ctk
+from CTkMessagebox import CTkMessagebox
 from PIL import Image
 
 from .. import assets
@@ -52,7 +53,8 @@ class MainFrame(ctk.CTkFrame):
         self.btn_setting.grid(pady=10, sticky="s")
 
         self.btn_about = self._create_button(
-            "关于", assets.ABOUT_ICON, icon_size=30, button_width=50
+            "关于", assets.ABOUT_ICON, icon_size=30, button_width=50,
+            command=self._show_about_me,
         )
         self.btn_about.grid(pady=10, sticky="s")
 
@@ -110,7 +112,20 @@ class MainFrame(ctk.CTkFrame):
         for row in rows:
             self.grid_rowconfigure(row[0], weight=row[1])
         for col in cols:
-            self.grid_columnconfigure(col[0], weight=col[1])    
+            self.grid_columnconfigure(col[0], weight=col[1])
+
+    def _show_about_me(self) -> None:
+        CTkMessagebox(
+            self, 
+            title="关于ExHelper",
+            message=("ExHelper审查助手\n"
+                     "Version 0.1.0\n"
+                     "Copyright (C) 2024 by Chenyu Lue\n"
+                     "Created with Python and customtkinter"
+            ),
+            icon=str(assets.APP_ICON),
+            border_width=5,
+        )
 
 if __name__ == "__main__":
     app = ctk.CTk()
