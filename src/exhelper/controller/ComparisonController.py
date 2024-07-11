@@ -2,10 +2,10 @@ from ..model import ComparisonModel, ConfigModel
 from ..view import ComparisonFrame
 
 class ComparisonController:
-    def __init__(self, model: ComparisonModel, view: ComparisonFrame) -> None:
+    def __init__(self, model: ComparisonModel, view: ComparisonFrame, setting: ConfigModel) -> None:
         self.model = model
         self.view = view
-        self.setting = ConfigModel()
+        self.setting = setting
 
     def clear_texts(self) -> None:
         self.view.text_left.delete("1.0", "end")

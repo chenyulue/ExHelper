@@ -5,10 +5,10 @@ from ..controller import ComparisonController
 
 
 class ComparisonFrame(ctk.CTkFrame):
-    def __init__(self, master, *args, **kwargs):
+    def __init__(self, master, setting: ConfigModel, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.master = master
-        self.setting = ConfigModel()
+        self.setting = setting
         self.controller = None
         self.callbacks = {
             "清空": self.clear_texts,
@@ -101,6 +101,6 @@ class ComparisonFrame(ctk.CTkFrame):
 
 if __name__ == "__main__":
     app = ctk.CTk()
-    main_window = ComparisonFrame(app)
+    main_window = ComparisonFrame(app, ConfigModel())
     main_window.grid(stick="nsew")
     app.mainloop()

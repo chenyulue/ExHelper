@@ -8,10 +8,10 @@ from ..view import CheckDefectFrame
 
 
 class CheckDefectController:
-    def __init__(self, model: CheckDefectModel, view: CheckDefectFrame) -> None:
+    def __init__(self, model: CheckDefectModel, view: CheckDefectFrame, setting: ConfigModel) -> None:
         self.model = model
         self.view = view
-        self.setting = ConfigModel()
+        self.setting = setting
 
         self.simple_search_result = None
         self.simple_search_result_num = 0

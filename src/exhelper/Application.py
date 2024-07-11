@@ -19,18 +19,20 @@ class Application(ctk.CTk):
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
-        self.main_frame = MainFrame(self)
+        self.main_frame = MainFrame(self, self.setting)
         self.main_frame.grid(sticky="nsew")
 
         self.comparison_controller = ComparisonController(
             ComparisonModel("",""),
-            self.main_frame.comparison_frame
+            self.main_frame.comparison_frame,
+            self.setting,
         )
         self.main_frame.comparison_frame.set_controller(self.comparison_controller)
 
         self.checkdefect_controller = CheckDefectController(
             CheckDefectModel(),
-            self.main_frame.examine_frame
+            self.main_frame.examine_frame,
+            self.setting,
         )
         self.main_frame.examine_frame.set_controller(self.checkdefect_controller)
 

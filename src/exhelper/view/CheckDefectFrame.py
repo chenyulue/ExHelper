@@ -9,10 +9,10 @@ from ..utilities import CTkLinkedCheckBoxes, CTkTristateCheckBox
 from .. import assets
 
 class CheckDefectFrame(ctk.CTkFrame):
-    def __init__(self, master, *args, **kwargs):
+    def __init__(self, master, setting: ConfigModel, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.master = master
-        self.setting = ConfigModel()
+        self.setting = setting
         self.regex_is_on = ctk.BooleanVar(value=False)
         self.controller = None
         self.defect_check_items = {}
@@ -177,7 +177,7 @@ class CheckDefectFrame(ctk.CTkFrame):
         
         for key, items in self.setting.check_items.items():
             self.defect_check_items[key] = CTkLinkedCheckBoxes(
-                frame_check_items, key, items, chk_select_all_var,
+                frame_check_items, key, items, self.setting, chk_select_all_var,
             )
             self.defect_check_items[key].grid(sticky="ew", padx=(5,0), pady=(5,10))
             

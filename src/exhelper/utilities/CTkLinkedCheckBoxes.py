@@ -3,9 +3,9 @@ from ..model import ConfigModel
 from .CTkTristateCheckBox import CTkTristateCheckBox
 
 class CTkLinkedCheckBoxes(ctk.CTkFrame):
-    def __init__(self, master, title: str, children: list[str], external_var: ctk.Variable|None=None, indent:int=20, gap:int=5, *args, **kwargs):
+    def __init__(self, master, title: str, children: list[str], setting: ConfigModel, external_var: ctk.Variable|None=None, indent:int=20, gap:int=5, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
-        self.setting = ConfigModel()
+        self.setting = setting
 
         self._title = title
         self._children = children
@@ -71,5 +71,5 @@ class CTkLinkedCheckBoxes(ctk.CTkFrame):
 
 if __name__ == "__main__":
     root = ctk.CTk()
-    CTkLinkedCheckBoxes(root, "A", ["A1", "A2", "A3"]).grid()
+    CTkLinkedCheckBoxes(root, "A", ["A1", "A2", "A3"], ConfigModel()).grid()
     root.mainloop()

@@ -9,10 +9,10 @@ from .ComparisonFrame import ComparisonFrame
 from .CheckDefectFrame import CheckDefectFrame
 
 class MainFrame(ctk.CTkFrame):
-    def __init__(self, master: ctk.CTk, **kwargs) -> None:
+    def __init__(self, master: ctk.CTk, setting: ConfigModel, **kwargs) -> None:
         super().__init__(master, **kwargs)
         self.master = master
-        self.setting = ConfigModel()
+        self.setting = setting
 
         self._configure_grid([(0, 1)], [(0, 0), (1, 1)])
 
@@ -58,8 +58,8 @@ class MainFrame(ctk.CTkFrame):
 
         self.body.grid_rowconfigure(0, weight=1)
         self.body.grid_columnconfigure(0, weight=1)
-        self.examine_frame = CheckDefectFrame(self.body)
-        self.comparison_frame = ComparisonFrame(self.body)
+        self.examine_frame = CheckDefectFrame(self.body, setting)
+        self.comparison_frame = ComparisonFrame(self.body, setting)
         self._toggle_examine()
 
     def _toggle_examine(self):
@@ -118,6 +118,6 @@ if __name__ == "__main__":
     app.geometry("1200x800")
     app.grid_rowconfigure(0, weight=1)
     app.grid_columnconfigure(0, weight=1)
-    main_window = MainFrame(app)
+    main_window = MainFrame(app, ConfigModel())
     main_window.grid(stick="nsew")
     app.mainloop()
