@@ -167,7 +167,7 @@ class CheckDefectFrame(ctk.CTkFrame):
         frame_check_items.grid(row=1, column=0, columnspan=2, sticky="sn", padx=1, pady=(5,0))
 
         self._num_all_check_items = sum(len(item) for item in self.setting.check_items.values())
-        chk_select_all_var = ctk.IntVar(value=7)
+        chk_select_all_var = ctk.IntVar(value=self._num_all_check_items)
         self.chk_select_all = CTkTristateCheckBox(
             frame_check_items, text="全选", font=self.setting.font_bold,
             offvalue=0, onvalue=self._num_all_check_items, command=self._on_all_items_checked,
