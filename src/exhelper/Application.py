@@ -13,7 +13,7 @@ class Application(ctk.CTk):
         self.title("审查助手 - ExHelper")
         self.wm_iconbitmap(assets.APP_ICON)
         
-        width, height = 1200, 800
+        width, height = 1100, 800
         self.minsize(width, height)
 
         self.grid_rowconfigure(0, weight=1)
@@ -30,7 +30,7 @@ class Application(ctk.CTk):
         self.main_frame.comparison_frame.set_controller(self.comparison_controller)
 
         self.checkdefect_controller = CheckDefectController(
-            CheckDefectModel(),
+            CheckDefectModel(self.setting),
             self.main_frame.examine_frame,
             self.setting,
         )

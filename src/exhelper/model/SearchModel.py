@@ -12,7 +12,7 @@ class SearchModel:
         self.pattern = None
         self.use_regex = regex
 
-    def reset_search_model(self, content: str, regex: bool) -> None:
+    def reset_search_model(self, content: str, regex: bool=True) -> None:
         self.content = content
         self.use_regex = regex
         self.pattern = None
