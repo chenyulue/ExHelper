@@ -50,14 +50,14 @@ class ConfigModel:
         conn.close()
 
     def load_unclear_words(self) -> list[str]:
-        conn = sqlite3.connect(assets.DATA)
+        conn = sqlite3.connect(self._datafile)
         cur = conn.cursor()
         words = [item[0] for item in cur.execute("SELECT words FROM unclear_words")]
         conn.close()
         return words
 
     def save_unclear_words(self, words: list[str]) -> None:
-        conn = sqlite3.connect(assets.DATA)
+        conn = sqlite3.connect(self._datafile)
         cur = conn.cursor()
         cur.executemany(
             "INSERT OR IGNORE INTO unclear_words (words) VALUES(?)",
@@ -67,14 +67,14 @@ class ConfigModel:
         conn.close()
 
     def remove_unclear_words(self) -> None:
-        conn = sqlite3.connect(assets.DATA)
+        conn = sqlite3.connect(self._datafile)
         cur = conn.cursor()
         cur.execute("DELETE FROM unclear_words")
         conn.commit()
         conn.close()
 
     def load_check_pattern(self, kind: str) -> list[str]:
-        conn = sqlite3.connect(assets.DATA)
+        conn = sqlite3.connect(self._datafile)
         cur = conn.cursor()
         pattern = [
             item[0]
@@ -86,7 +86,7 @@ class ConfigModel:
         return pattern
 
     def save_check_pattern(self, kind: str, pattern: str) -> None:
-        conn = sqlite3.connect(assets.DATA)
+        conn = sqlite3.connect(self._datafile)
         cur = conn.cursor()
         cur.execute(
             "INSERT OR REPLACE INTO check_pattern VALUES (?,?)", [kind, pattern]
@@ -95,21 +95,21 @@ class ConfigModel:
         conn.close()
 
     def remove_check_pattern(self) -> None:
-        conn = sqlite3.connect(assets.DATA)
+        conn = sqlite3.connect(self._datafile)
         cur = conn.cursor()
         cur.execute("DELETE FROM check_pattern")
         conn.commit()
         conn.close()
 
     def load_sensitive_words(self) -> list[str]:
-        conn = sqlite3.connect(assets.DATA)
+        conn = sqlite3.connect(self._datafile)
         cur = conn.cursor()
         words = [item[0] for item in cur.execute("SELECT words FROM sensitive_words")]
         conn.close()
         return words
 
     def save_sensitive_words(self, words: list[str]) -> None:
-        conn = sqlite3.connect(assets.DATA)
+        conn = sqlite3.connect(self._datafile)
         cur = conn.cursor()
         cur.executemany(
             "INSERT OR IGNORE INTO sensitive_words (words) VALUES(?)",
@@ -119,7 +119,7 @@ class ConfigModel:
         conn.close()
 
     def remove_sensitive_words(self) -> None:
-        conn = sqlite3.connect(assets.DATA)
+        conn = sqlite3.connect(self._datafile)
         cur = conn.cursor()
         cur.execute("DELETE FROM sensitive_words")
         conn.commit()

@@ -7,15 +7,20 @@ class SearchResult(NamedTuple):
     end: int
 
 class SearchModel:
-    def __init__(self, content: str, regex: bool=True) -> None:
+    def __init__(self, content: str, regex: bool=True, pattern: str|None=None) -> None:
         self.content = content
-        self.pattern = None
         self.use_regex = regex
+        self.pattern = None
+        if pattern is not None:
+            self.reset_search_model(pattern)
 
-    def reset_search_model(self, content: str, regex: bool=True) -> None:
-        self.content = content
-        self.use_regex = regex
-        self.pattern = None
+    def reset_search_model(self, content: str|None=None, regex: bool|None=None, pattern: str|None=None) -> None:
+        if content is not None:
+            self.content = content
+        if regex is not None:
+            self.use_regex = regex
+        if regex is not None:
+            self.reset_search_model(pattern)
 
     def set_search_pattern(self, pattern: str, *args, **kwargs) -> None:
         try:
