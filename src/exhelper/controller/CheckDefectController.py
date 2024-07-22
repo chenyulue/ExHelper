@@ -50,6 +50,7 @@ class CheckDefectController:
             "摘要字数": self._abstract_check_word_number,
             "疑似不清楚措辞": self._claim_check_unclear_words,
             "说明书敏感词": self._description_check_sensitive_words,
+            "图号一致性": self._description_check_figure_numbers_consistency
         }
 
     def _get_selected_check_items(self, defect_category: str) -> list[str]:
@@ -144,6 +145,13 @@ class CheckDefectController:
                 if isinstance(text_widget, ctk.CTkTextbox):
                     text_widget.delete("1.0", "end")
         self._clear_result_text()
+
+    def _clear_result_tags(self) -> None:
+        for _, tab in self.view.tabview_check._tab_dict.items():
+            for text_widget in tab.grid_slaves():
+                if isinstance(text_widget, ctk.CTkTextbox):
+                    for tag in text_widget.tag_names():
+                        text_widget.tag_remove(tag, "1.0", "end")
 
     def _clear_result_text(self) -> None:
         for _, tab in self.view.tabview_result._tab_dict.items():
@@ -289,12 +297,71 @@ class CheckDefectController:
 
             result_textbox.configure(state="disabled")
 
+    def _description_check_figure_numbers_consistency(self) -> None:
+        self.model.description.reset_description(
+            self._description_textbox.get("1.0", "end"),
+            self._fignumber_textbox.get("1.0", "end"),
+        )
+        
+        self._description_textbox.tag_remove("figure_numbers", "1.0", "end")
+        self._description_textbox.tag_remove("current", "1.0", "end")
+        self._fignumber_textbox.tag_remove("figure_numbers", "1.0", "end")
+        self._fignumber_textbox.tag_remove("current", "1.0", "end")
+
+        extra_in_description, extra_in_drawing = self.model.description.check_figure_numbers_consistency()
+        for _, positions in extra_in_description.items():
+            for start, end in positions:
+                self._description_textbox.tag_add("figure_numbers", f"1.0+{start}c", f"1.0+{end}c")
+        self._description_textbox.tag_config("figure_numbers", background="yellow")
+        self._description_check_figure_numbers_consistency_show_result(extra_in_description, "说明书中多余图号", 1, 0)
+
+        for _, positions in extra_in_drawing.items():
+            for start, end in positions:
+                self._fignumber_textbox.tag_add("figure_numbers", f"1.0+{start}c", f"1.0+{end}c")
+        self._fignumber_textbox.tag_config("figure_numbers", background="yellow")
+        self._description_check_figure_numbers_consistency_show_result(extra_in_drawing, "附图中多余图号", 1, 1)
+
+    def _description_check_figure_numbers_consistency_show_result(self, result: dict[str, list[tuple[int, int]]], label: str, bind_row: int, bind_column: int) -> None:
+        if result:
+            result_textbox: ctk.CTkTextbox = self.view.tabview_result.tab(
+                "说明书及附图缺陷"
+            ).grid_slaves()[0]  # type: ignore
+            result_textbox.configure(state="normal")
+
+            result_textbox.insert("end", f"【{label}】\n    ")
+            for word, index in result.items():
+                result_textbox.insert("end", word, tags=(word, "figure_numbers"))
+                result_textbox.insert("end", "  ")
+                result_textbox.tag_bind(
+                    word, "<Button-1>", self._focus_words(index, "说明书及附图", row=bind_row, column=bind_column)
+                )
+            else:
+                result_textbox.insert("end", "\n")
+                
+            result_textbox.tag_config(
+                "figure_numbers", underline=True, foreground="blue"
+            )
+            result_textbox.tag_bind(
+                "figure_numbers",
+                "<Enter>",
+                lambda event: result_textbox.configure(cursor="hand2"),
+            )
+            result_textbox.tag_bind(
+                "figure_numbers",
+                "<Leave>",
+                lambda event: result_textbox.configure(cursor="arrow"),
+            )
+
+            result_textbox.configure(state="disabled")
+
+    # Check entry
     def check_defects(self) -> None:
         abstract_other_defects = self._get_selected_check_items("摘要及其他缺陷")
         claims_defects = self._get_selected_check_items("权利要求书缺陷")
         description_defects = self._get_selected_check_items("说明书及附图缺陷")
 
         self._clear_result_text()
+        self._clear_result_tags()
         for item in abstract_other_defects:
             self.check_defects_method.get(item, lambda: None)()
 

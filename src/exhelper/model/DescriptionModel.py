@@ -10,9 +10,6 @@ class DescriptionModel:
         self.search = SearchModel("")
         self.setting = setting
 
-        self._description_fignum = defaultdict(list)
-        self._drawing_fignum = defaultdict(list)
-
         self._sensitive_words = self.setting.load_sensitive_words()
         self._figure_numbers_pattern = self.setting.load_check_pattern("figure_number")[0]
         self._figure_separator_pattern = self.setting.load_check_pattern("figure_separator")[0]
@@ -30,6 +27,8 @@ class DescriptionModel:
         self.search.reset_search_model(self._description)
         self.search.set_search_pattern(self._figure_numbers_pattern)
         description_fignum = self.search.search()
+        self._description_fignum = defaultdict(list)
+        self._drawing_fignum = defaultdict(list)
 
         # 如果附图中包含诸如“图1-3”这样的图号，则说明书中查找到的诸如“4-5”的图序号保留原样而不拆分
         if re.search(r"图[0-9a-zA-Z'()]+-[0-9a-zA-Z'()]+", self._figure_numbers) is not None:

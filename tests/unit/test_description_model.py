@@ -54,7 +54,9 @@ def test_split_compound_figure_numbers(model):
 ])
 def test_all_kinds_of_figure_numbers(model, fignum):
     model.reset_description(
-        f"这是说明书，其中有图1和图4至5, 包括可变图号{fignum}和其他图号", 
+        f"这是说明书，其中有图1和图4至5, 包括图5可变图号{fignum}和其他图号", 
         "图1、图2、图3、图4")
     model.check_figure_numbers_consistency()
     assert fignum in model._description_fignum
+    assert model._description_fignum["图4"] == [(12, 16)]
+    assert model._description_fignum["图5"] == [(12, 16), (20, 22)]
