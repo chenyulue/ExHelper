@@ -25,7 +25,7 @@ class CheckDefectFrame(ctk.CTkFrame):
         self.tabview_check.grid(row=0, column=0, sticky="nsew")
 
         self.tabview_result = self._create_panel(
-            ["摘要及其他缺陷", "权利要求书缺陷", "说明书及附图缺陷"], height=200)
+            ["摘要及其他缺陷", "权利要求书缺陷", "说明书及附图缺陷"], height=300)
         self.tabview_result.grid(row=1, column=0, sticky="nsew")
 
         self.check_import = self._create_import_setting_buttons()
@@ -37,8 +37,8 @@ class CheckDefectFrame(ctk.CTkFrame):
     def set_controller(self, controller: CheckDefectController):
         self.controller = controller
 
-    def _create_panel(self, tags: list[str], height:int=420, two_texts: None|int = None) -> ctk.CTkTabview:
-        tabview = ctk.CTkTabview(self, width=800,)
+    def _create_panel(self, tags: list[str], height:int=400, two_texts: None|int = None) -> ctk.CTkTabview:
+        tabview = ctk.CTkTabview(self, width=800, height=height)
         
         for i, tag in enumerate(tags):
             tabview.add(tag)
@@ -46,7 +46,7 @@ class CheckDefectFrame(ctk.CTkFrame):
                 tabview.tab(tag).grid_rowconfigure(0, weight=1)
                 tabview.tab(tag).grid_columnconfigure(0, weight=1)
                 text = ctk.CTkTextbox(
-                    tabview.tab(tag), width=810, height=height,
+                    tabview.tab(tag), width=810, #height=height,
                     spacing2=self.setting.text_spacing2,
                     spacing3=self.setting.text_spacing3,
                     font=self.setting.font_text,
@@ -62,13 +62,13 @@ class CheckDefectFrame(ctk.CTkFrame):
                 label_left.grid(row=0, column=0, sticky="w")
                 label_right.grid(row=0, column=1, sticky="w")
                 text_left = ctk.CTkTextbox(
-                    tabview.tab(tag), width=700, height=height-20,
+                    tabview.tab(tag), width=700, #height=height-20,
                     spacing2=self.setting.text_spacing2,
                     spacing3=self.setting.text_spacing3,
                     font=self.setting.font_text,
                 )
                 text_right = ctk.CTkTextbox(
-                    tabview.tab(tag), width=100, height=height-20,
+                    tabview.tab(tag), width=100, #height=height-20,
                     spacing2=self.setting.text_spacing2,
                     spacing3=self.setting.text_spacing3,
                     font=self.setting.font_text,

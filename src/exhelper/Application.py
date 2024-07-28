@@ -13,7 +13,7 @@ class Application(ctk.CTk):
         self.title("审查助手 - ExHelper")
         self.wm_iconbitmap(assets.APP_ICON)
         
-        width, height = 1100, 800
+        width, height = 1150, 800
         self.minsize(width, height)
 
         self.grid_rowconfigure(0, weight=1)

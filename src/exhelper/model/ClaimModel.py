@@ -16,3 +16,6 @@ class ClaimModel:
         self.search.reset_search_model(self._claims)
         self.search.set_search_pattern("|".join(self._unclear_words))
         return self.search.search()
+
+    def _parse_claims(self) -> dict[int, Any]:
+        
