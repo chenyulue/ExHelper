@@ -35,3 +35,7 @@ class ClaimModel:
             self.claims[claim_num]["content"] = match.group(0)
             self.claims[claim_num]["subject"] = match.group(2)
             self.claims[claim_num]["position"] = (start, end)
+
+    def _get_dependency_numbers(self, claim: Claim) -> list[int]:
+        pattern = r".+?(权?利?要?求?)([0-9]+)((?:[或、至到~-][0-9]+)*)(任?意?一?项?).+"
+        pass

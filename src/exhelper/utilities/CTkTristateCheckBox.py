@@ -17,13 +17,14 @@ class CTkTristateCheckBox(ctk.CTkCheckBox):
                 self._check_state = None
 
         self._draw_tristate()
+        self._creating_bindings_override()
 
     def _draw_tristate(self, no_color_updates=False):
         if no_color_updates is False and self._check_state is None:
             self._canvas.itemconfig(
                 "inner_parts",
                 outline=self._apply_appearance_mode(self._bg_color),
-                fill=self._apply_appearance_mode(self._hover_color),
+                fill=self._apply_appearance_mode(self._fg_color),
             )
 
     def _draw(self, no_color_updates=False):
@@ -40,6 +41,19 @@ class CTkTristateCheckBox(ctk.CTkCheckBox):
             else:
                 self._check_state = None
                 self._draw()
+
+    def _on_leave(self, event=0):
+        super()._on_leave(event)
+
+        if self._check_state is None:
+            self._canvas.itemconfig("inner_parts",
+                                    fill=self._apply_appearance_mode(self._fg_color),
+                                    outline=self._apply_appearance_mode(self._bg_color))
+
+    def _creating_bindings_override(self, sequence: str|None = None):
+        if sequence is None or sequence == "<Leave>":
+            self._canvas.bind("<Leave>", self._on_leave, add=False)
+            self._text_label.bind("<Leave>", self._on_leave, add=False)
 
 
 if __name__ == "__main__":
