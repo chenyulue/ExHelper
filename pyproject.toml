@@ -13,7 +13,7 @@ dependencies = [
     "ctktooltip>=0.8",
     "ctkmessagebox>=2.7",
 ]
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.13"
 readme = "README.md"
 license = {text = "MIT"}
 
@@ -30,4 +30,12 @@ distribution = true
 [tool.pdm.dev-dependencies]
 test = [
     "pytest>=8.2.2",
+]
+package = [
+    "cx-Freeze>=7.2.5",
+]
+
+[tool.cxfreeze]
+executables = [
+    { script = "src/exhelper/__main__.py", base = "gui", target_name = "exhelper", icon = "./src/exhelper/assets/icons/APP-ICON.ico" },
 ]

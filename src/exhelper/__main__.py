@@ -1,6 +1,6 @@
 import customtkinter as ctk
-from .Application import Application
-from . import assets
+from exhelper.Application import Application
+from exhelper import assets
 
 ctk.set_default_color_theme(str(assets.DEFAULT_THEME))
 
